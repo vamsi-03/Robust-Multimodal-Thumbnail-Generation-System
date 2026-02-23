@@ -3,7 +3,7 @@
 **Role:** Research Engineer Assessment  
 **Status:** Production Prototype (FastAPI + Streamlit)
 
-
+---
 
 ## 🚀 Overview
 
@@ -11,7 +11,7 @@ Current latent diffusion models exhibit inherent stochasticity, making them unre
 
 This project solves these fundamental generative flaws by implementing a **Closed-Loop Verification Architecture**. By decoupling semantic intent from deterministic rendering and surrounding the generation process with strict machine-verifiable safeguards, this system transforms probabilistic AI generation into a highly reliable asset pipeline.
 
-
+---
 
 ## 🧠 Core Architecture & Information Flow
 
@@ -25,7 +25,7 @@ The system executes via a four-phase orchestrated pipeline, preventing errors be
 
 4. **Autonomous Quality Verification (Closed-Loop)** — The composite image passes through a suite of validators. If any hard constraint fails, the orchestrator triggers a **self-repairing retry loop** with tightening semantic constraints (up to 3 attempts).
 
-
+---
 
 ## 🛡️ Hard Constraints & Autonomous Auditing
 
@@ -38,7 +38,7 @@ This system requires zero manual inspection. Every output is verified against:
 | **Mobile Readability** | Downsamples to ≤200px width and runs a sequence-similarity check to ensure typography survives pixel-aliasing. |
 | **Visual Integrity (VLM-as-a-Judge)** | Because traditional CV cannot semantically differentiate "art" from "distorted AI hands," a **Gemini VLM Auditor** scans the background for faces, hands, and printed text before typography is applied. |
 
-
+---
 
 ## 💻 Installation & Setup
 
@@ -65,7 +65,7 @@ token=your_gateway_token
 
 The app uses a single gateway for both OpenAI-compatible (decomposition) and Gemini (image generation + VLM audit) endpoints.
 
-
+---
 
 ## 🎮 Usage
 
@@ -76,11 +76,16 @@ python main.py
 ```
 
 - **Endpoint:** `POST http://localhost:8000/generate?prompt=Your+Topic`
-- **Example:** `python test_api.py` or  
-  `curl -X POST "http://localhost:8000/generate?prompt=End+of+the+World"`
+- **Example:** `python test_api.py` or `curl -X POST "http://localhost:8000/generate?prompt=End+of+the+World"`
 
-**Success response:** `{"status": "success", "url": "latest_thumbnail.png", "attempts": 1}`  
-**Failure (after 3 attempts):** `{"status": "failed", "error_type": "ConstraintViolation", "message": "...", "failure_log": [...], "fallback_image": "outputs/fallback_solid_color.png"}`
+**Success response:**
+```json
+{"status": "success", "url": "latest_thumbnail.png", "attempts": 1}
+```
+**Failure (after 3 attempts):**
+```json
+{"status": "failed", "error_type": "ConstraintViolation", "message": "...", "failure_log": [], "fallback_image": "outputs/fallback_solid_color.png"}
+```
 
 ### Batch testing (Streamlit UI)
 
@@ -92,7 +97,25 @@ streamlit run streamlit_batch.py
 
 Enter one prompt per line and click **Run batch**. All attempts (background + thumbnail images and logs) are kept in session. Outputs are written to `batch_output/run_<id>/`.
 
+---
 
+## 📸 UI — Batch testing
+
+This is how the Streamlit batch testing UI looks.
+
+**1. Prompt input** — Enter one prompt per line and click **Run batch**.
+
+![Batch UI — input](UI_Screenshots/ss_1.png)
+
+**2. Run results** — Each run shows status (success/fail) and expandable attempts.
+
+![Batch UI — results](UI_Screenshots/ss_2.png)
+
+**3. Attempt details** — Background and thumbnail per attempt, with logs.
+
+![Batch UI — attempt details](UI_Screenshots/ss_3.png)
+
+---
 
 ## 🐛 Observing the Recovery Loop
 
@@ -101,7 +124,7 @@ Because the prompt decomposition is highly effective, the system often passes on
 - Use prompts that are likely to fail the VLM audit on the first try (e.g., topics that may trigger faces or text in the background). The orchestrator will retry with **stricter semantic constraints** (e.g., *"Abstract geometric shapes and tech patterns only. Strictly NO people or faces"* → *"Minimalist solid color gradient. Completely abstract. Zero human subjects or silhouettes"*).
 - Inspect the Streamlit batch UI: failed attempts and their failure reasons (e.g. `visual_integrity`, `text_fidelity`) are shown per attempt, so you can see how each retry tightens the pipeline.
 
-
+---
 
 ## 📁 Outputs (local only; see `.gitignore`)
 
@@ -111,10 +134,8 @@ Because the prompt decomposition is highly effective, the system often passes on
 - `batch_output/` — per-run attempt images (Streamlit batch)  
 - `ocr_mask.png`, `mobile_test.png` — validator intermediates  
 
-
+---
 
 ## 🏁 Research Conclusion
 
 Rather than attempting to "prompt engineer" a probabilistic model into generating perfect text and layouts, this system **encapsulates the generative model within a deterministic mathematical and semantic framework**. The resulting pipeline achieves strong compliance with hard constraints, delivering a reliable asset generation tool suitable for production prototyping.
-
-
