@@ -1,0 +1,35 @@
+# Environment and secrets (never commit)
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+
+# Generated outputs and temp files
+outputs/
+batch_output/
+temp_bg.png
+latest_thumbnail.png
+ocr_mask.png
+mobile_test.png
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+*.swp
+*.swo
+
+# Streamlit
+.streamlit/
+
+# Optional: keep one sample run for docs (uncomment to ignore all batch runs)
+# batch_output/
